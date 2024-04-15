@@ -26,21 +26,23 @@ app.get("/api/hello", function (req, res) {
 
 // default date endpoint
 app.get("/api", function (req, res) {
-  const unixStamp = Date.now()
-  res.json(dateObject(unixStamp));
-});
-
-// date endpoint
-app.get("/api/:time(([a-zA-Z0-9]*-[a-zA-Z0-9]*-[a-zA-Z0-9]*))", function (req, res) {
-  const unixStamp = Date.parse(req.params.time)
-  res.json(dateObject(unixStamp));
+  // const date = new Date(Date.now())
+  res.json(dateObject(Date.now()));
 });
 
 // epoch date endpoint
-app.get("/api/:time(([0-9]+[a-zA-Z-0-9]*))", function (req, res) {
-  const unixStamp = Number(req.params.time)
-  res.json(dateObject(unixStamp));
+app.get("/api/:time([0-9]+)", function (req, res) {
+  // const date = new Date(Number(req.params.time))
+  res.json(dateObject(Number(req.params.time)));
 });
+
+// date endpoint
+app.get("/api/:time", function (req, res) {
+  // const date = new Date(req.params.time)
+  // console.log(date)
+  res.json(dateObject(req.params.time));
+});
+
 
 // Listen on port set in environment variable or default to 3000
 var listener = app.listen(process.env.PORT || 3000, function () {
@@ -49,12 +51,12 @@ var listener = app.listen(process.env.PORT || 3000, function () {
 
 
 
-function dateObject(unixTimeStamp) {
-  if (isNaN(unixTimeStamp)) return {"error": "Invalid Date"}
-
-  const localTime = new Date(unixTimeStamp);  
+function dateObject(input) {
+  const date = new Date(input)
+  if (isNaN(date)) return {"error": "Invalid Date"}
+ 
   return {
-    'unix': unixTimeStamp,
-    "utc": localTime.toUTCString()
+    'unix': date.getTime(),
+    "utc": date.toUTCString()
   }
 }
