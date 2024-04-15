@@ -24,14 +24,20 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+// default date endpoint
+app.get("/api", function (req, res) {
+  const unixStamp = Date.now()
+  res.json(dateObject(unixStamp));
+});
+
 // date endpoint
-app.get("/api/:time(([0-9]{4}-[0-9]{2}-[0-9]{2}))", function (req, res) {
+app.get("/api/:time(([a-zA-Z0-9]*-[a-zA-Z0-9]*-[a-zA-Z0-9]*))", function (req, res) {
   const unixStamp = Date.parse(req.params.time)
   res.json(dateObject(unixStamp));
 });
 
 // epoch date endpoint
-app.get("/api/:time(([0-9]+))", function (req, res) {
+app.get("/api/:time(([0-9]+[a-zA-Z-0-9]*))", function (req, res) {
   const unixStamp = Number(req.params.time)
   res.json(dateObject(unixStamp));
 });
@@ -44,10 +50,11 @@ var listener = app.listen(process.env.PORT || 3000, function () {
 
 
 function dateObject(unixTimeStamp) {
+  // if (isNaN(unixTimeStamp)) return {"error": "Invalid Date"}
+
   const localTime = new Date(unixTimeStamp);  
-  date = {
+  return {
     'unix': unixTimeStamp,
     "utc": localTime.toUTCString()
   }
-  return date
 }
