@@ -24,9 +24,30 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+// date endpoint
+app.get("/api/:time(([0-9]{4}-[0-9]{2}-[0-9]{2}))", function (req, res) {
+  const unixStamp = Date.parse(req.params.time)
+  res.json(dateObject(unixStamp));
+});
 
+// epoch date endpoint
+app.get("/api/:time(([0-9]+))", function (req, res) {
+  const unixStamp = Number(req.params.time)
+  res.json(dateObject(unixStamp));
+});
 
 // Listen on port set in environment variable or default to 3000
 var listener = app.listen(process.env.PORT || 3000, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
+
+
+
+function dateObject(unixTimeStamp) {
+  const localTime = new Date(unixTimeStamp);  
+  date = {
+    'unix': unixTimeStamp,
+    "utc": localTime.toUTCString()
+  }
+  return date
+}
