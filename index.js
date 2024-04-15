@@ -50,7 +50,7 @@ var listener = app.listen(process.env.PORT || 3000, function () {
 
 
 function dateObject(unixTimeStamp) {
-  // if (isNaN(unixTimeStamp)) return {"error": "Invalid Date"}
+  if (isNaN(unixTimeStamp)) return {"error": "Invalid Date"}
 
   const localTime = new Date(unixTimeStamp);  
   return {
